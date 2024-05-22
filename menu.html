@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>menu page</title>
+  <!-- 連結css -->
+  <link rel="stylesheet" href="menuStyle.css">
+  <!-- 連結Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas/4.2.5/tocas.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas/4.2.5/tocas.min.js"></script>
+  <!-- 連結 JQery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+  <div class="topDecorate" style="display: flex;  align-items: center; margin: auto; justify-content : center; ">
+    <h1>ORDER</h1>
+  </div>
+  <!-- 產品放置處__productSpace -->
+  <!-- 請一定要保留 productSpace 這個class名稱 會將產品資料放進這個class-->
+  <div class="productSpace">
+    <!-- 商品模板 -->
+    <div class="item" id="result_PID">
+      <div class="itempic">
+        <img src="./images/bokChoy.jpg" class="productPicSet">
+      </div>
+      <div class="itemtext" style="display: flex; flex-direction: column;">
+        <h4 class="PName" style="font-weight:bold ;">${result.NAME}</h4>
+        <h5 class="PPrice">價格 ${result.PRICE}</h4>
+        <!-- <h4 class="PRemain">剩餘數量 ${result.REMAIN}</h4>-->
+        <!--不需要顯示數量 吧-->
+        <h5 class="PIntro">&nbsp&nbsp&nbsp&nbsp${result.INTRO}</h5>
+        
+      </div>
+      
+      <div class="itemnum" style="display: flex; flex-direction: row;">
+        <input class="btnmin" type="button" value="-"  onclick="productMinus(this)">
+                <div class="buynum" style="width: 35px; display: flex; justify-content: center;">0</div>
+         <input class="btnpls" type="button" value="+" onclick="productPlus(this)"> 
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- 防止購物車覆蓋的空白div -->
+  <div style="height: 100px;width: 640px;"></div>
+  <!-- 購物車 -->
+  <div class="car">
+    <!--<input type="button" value="car" id="carbtn">-->
+    <!--<div id="totalMoney" style="text-align: center;">0</div>-->
+    <button type="button" class="btnTotal" data-bs-toggle="modal" data-bs-target="#orderModal" id="lockBill">
+      結帳
+    </button><!-- 結帳按鈕希望可以跟著目前已選的數量變更金額@@ -->
+    
+  </div>
+
+<!-- 註冊彈跳視窗 -->
+  <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="orderModalLabel">訂單確認</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="" method="post">
+
+          <p><h5>訂購人:</h5></p>
+          <p><input type="text" name="customerName" value="訂購人"></p>
+
+          <p><h5>連絡電話:</h5></p>
+          <p><input type="text" name="customerPhone" value="連絡電話"></p>
+      
+          <table align="center" valign="center"  width="150" height="40">
+            <thead>
+            <tr align="center">
+              <th>品名</th><th>數量</th><th>單價</th>           
+            </tr>
+            </thead>
+            <tbody><!-- 訂單的內容放置區 -->
+              <tr align="center">
+              <td>111</td><td>111</td><td>111</td>
+              </tr>
+            </tbody>
+            <tfoot align="center">
+              <tr>
+              <th colspan="2">總金額</th><td></td><!-- 總金額 -->
+              </tr>
+            </tfoot>
+          </table>
+          
+      
+          <p><input type="submit" class="btn btn-primary" id="orderSend" value="送出訂單"></p>
+      
+      </form>
+      </div>
+    </div>
+  </div>
+
+<!-- 註冊彈跳視窗 -->
+  <div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="orderModalLabel">會員註冊</h1>
+        </div>
+        <div class="modal-body getDownWarn">
+          <h5>請輸入姓名</h5>
+          <input type="text" name="" id="username">
+          <h5>請輸入連絡電話</h5>
+          <input type="text" name="" id="userphone">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <!-- 送資料給後面 -->
+          <button type="button" class="btn btn-primary" id="register">確認</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <script src="/javascripts/product.js"></script> -->
+</body>
+<!-- 購物車置中 -->
+<!-- 這個功能有稍微跑版可能要重寫 -->
+<!-- 大概跑5px 多放幾個產品就可以看出來 -->
+<script type="text/javascript">
+  $(".car").css("margin-left", $(".topDecorate").css("margin-left"));
+$(".car").css("left", $(".topDecorate").css("left"));
+
+$(window).resize(function () {
+    $(".car").css("margin-left", $(".topDecorate").css("margin-left"));
+    $(".car").css("left", $(".topDecorate").css("left"));
+});
+
+</script>
+
+</html>

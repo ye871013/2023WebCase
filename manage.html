@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>manage</title>
+  <!-- 連結css -->
+  <link rel="stylesheet" href="productManaStyle.css">
+  <!-- 連結Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- 連結 JQery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+</head>
+
+
+<body>
+  <div class="topDecorate" style="display: flex;  align-items: center; margin: auto; justify-content : center; ">
+    <h1>MANAGEMENT</h1>
+  </div>
+  <div class="type">
+    <button type="button" class="showType" id="menuEdit">產品編輯</button>
+    <button type="button" class="showType" id="orderCheck">訂單一覽</button>
+  </div>
+
+<!-- 編輯菜單區 -->
+  <div id="menuEditspace" >
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProductInfoModal"
+      id="addItem">新增商品</button>
+    <div class="productSpace">
+      <div class="item" id="result_PID">
+        <div class="itempic">
+          <img src="./images/bokChoy.jpg" class="productPicSet">
+        </div>
+        <div class="itemtext" style="display: flex; flex-direction: column;">
+          <h4 class="PName" style="font-weight:bold ;">${result.NAME}</h4>
+          <h5 class="PPrice">價格 ${result.PRICE}</h4>
+          <!-- <h4 class="PRemain">剩餘數量 ${result.REMAIN}</h4>-->
+          <!--不需要顯示數量 吧-->
+          <h5 class="PIntro">&nbsp&nbsp&nbsp&nbsp${result.INTRO}</h5>
+          
+        </div>
+        
+        <div class="itemnum" style="display: flex; flex-direction: row;">
+          <input class="btnmin" type="button" value="-"  onclick="productMinus(this)">
+                  <div class="buynum" style="width: 75px; display: flex; justify-content: center;">0</div>
+           <input class="btnpls" type="button" value="+" onclick="productPlus(this)"> 
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 訂單查看區 -->
+  <div id="orderCheckSpace" style="display: none;">
+    <div class="orderSpace">
+    </div>
+    <div class="orderItem">
+      <table  border="1" width= "640px"> 
+        <thead>
+          <tr align="center">
+            <th>訂單編號:</th>
+            <td>0000000</td>
+            <th>訂購人:</th>
+            <td>0000000</td>
+            <th>訂單狀態:</th>
+            <td>0000000</td>
+          </tr>
+          <tr align="center">
+            <th>下訂時間:</th>
+            <td>0000000</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr align="center">
+            <th>品名</th><th>數量</th><th>單價</th>           
+          </tr>
+          <tr align="center">
+            <th>測試用名稱</th><th>測試數量</th><th>測試單價</th>           
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr align="center">
+            <th>總價</th>
+            <td>測試總價</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="btn"><div class="btn btn-primary">結單</div></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+
+
+  <!-- 修改庫存數量 -->
+  <div class="modal fade" id="editProductInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="editProductInfoLabel">新增品項//好怪我不知道要放什麼</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="/manager/editProductInfo" method="post">
+        <div class="modal-body">
+          <div name="id" style="display: none;"></div>
+          <!-- NAME -->
+          <div class="form-group">
+            <label class="form-label">
+              <h5>品名：</h5>
+            </label>
+            <input id="nameInp" name="nameIC" type="text" class="form-control" placeholder="請輸入商品名稱">
+          </div>
+
+          <!-- INTRO -->
+          <div class="form-group">
+            <label class="form-label">
+              <h5>商品介紹：</h5>
+            </label>
+            <input id="introduceInp" name="introduceInpE" type="text" class="form-control" placeholder="請輸入商品介紹">
+          </div>
+
+          <!-- PRICE -->
+          <div class="form-group">
+            <label class="form-label">
+              <h5>售價：</h5>
+            </label>
+            <input id="priceInp" name="priceIE" type="text" class="form-control" placeholder="請輸入商品售價">
+          </div>
+
+          <!-- STOCK/REMAIN -->
+          <div class="form-group">
+            <label class="form-label">
+              <h5>存貨數量：</h5>
+            </label>
+            <input id="stockInp" name="stockIE" type="text" class="form-control" placeholder="請輸入庫存">
+          </div>
+
+          <!-- PIC -->
+          <!-- <input type="file" capture="environment" accept="image*/" id="InpPic"> -->
+          <input id="input_img" name="input_img" type="file" capture="environment", accept="image/*" onchange="previewFile()">
+          <div id="view_img" style="display: block; margin-bottom: 10px;">
+            <img id="imgimg" src="" style="width: 100%; height: 100%;">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+          <!-- 送資料給後面 -->
+          <button type="button" class="btn btn-primary" id="editItemBtn">確認新增</button>
+          <button type="button" class="btn btn-primary" id="addItemBtn" style="display: none;">Add Product</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- 下架商品 --><!-- 直接不下架 把數量扣到零就當作下架 -->
+  <div class="modal fade" id="getDownModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">下架確認</h1>
+        </div>
+        <div class="modal-body getDownWarn">
+          <h5 id="getDownModalPName"></h5>
+          <br>
+          <h5>警告</h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <!-- 送資料給後面 -->
+          <button type="button" class="btn btn-primary" onclick="removeProductFromDB()">確認</button>
+          <!-- <input type="button" value="確認" onclick="removeProductFromDB()"> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+<!-- 菜單編輯&訂單查看的切換 -->
+<!-- 歡迎重寫重寫過 -->
+<script type="text/javascript">
+  $("#orderCheck").click(()=>{
+    $("#menuEditspace").attr("style","display:none")
+    $("#orderCheckSpace").attr("style","display:block")
+    console.log("menuEditspace")
+})
+$("#menuEdit").click(()=>{
+    $("#orderCheckSpace").attr("style","display:none")
+    $("#menuEditspace").attr("style","display:block")
+})
+</script>
+
+</html>
